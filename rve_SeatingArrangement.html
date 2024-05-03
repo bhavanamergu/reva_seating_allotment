@@ -1,0 +1,257 @@
+<template>
+   
+    <!-- Button to open the modal -->
+    <lightning-button label="Invigilator Assignment" onclick={openModal}></lightning-button>
+    <lightning-button variant="Brand" label="Download Allotments" icon-name="utility:download"
+    icon-position="left" onclick={openVfPage} class="slds-m-left_x-small"></lightning-button>
+    <br/><br/><br/>
+    
+
+    <!-- Modal -->
+        <c-rve-invigilator-assignment is-show-modal={showModal} onpassdata={handleDataPassed}></c-rve-invigilator-assignment>
+    
+
+<template if:true={variable1}>
+<article class="slds-card">
+   <div class="slds-card__header slds-grid">
+     <header class="slds-media slds-media_center slds-has-flexi-truncate">
+       <div class="slds-media__figure">
+         <span class="slds-icon_container slds-icon-standard-visits" title="visits">
+           <div class="slds-icon slds-icon_small" aria-hidden="true">
+               <lightning-icon icon-name='standard:visits' alternative-text='visits' size='small' title='visits'></lightning-icon>
+           </div>
+           <span class="slds-assistive-text">Seating Arrangement</span>
+         </span>
+       </div>
+       <div class="slds-media__body">
+         <h2 class="slds-card__header-title">
+             <span>Seating Arrangement</span>
+         </h2>
+       </div>
+     </header>
+   </div>
+   <div class="slds-card__body slds-card__body_inner">
+       <div class="container">
+           <div class="picklists">
+               <div class="row">
+                   <div class="picklist">
+                       <lightning-combobox
+                           name="Program Batch"
+                           label="Program Batch"
+                           placeholder="Select Program Batch"
+                           options={ProgramOption}
+                           onchange={SelectedProgramBatch}
+                           
+                           required
+                       ></lightning-combobox>
+                   </div>
+                   <div class="picklist">
+                    <lightning-combobox
+                        name="IAType"
+                        label="IA Type"
+                        placeholder="Select IA"
+                        options={IATypesOptions}
+                        onchange={handleIATypeChange}
+                        class="IAType"
+                        required
+                    ></lightning-combobox>
+                </div>
+                   <br/>
+               </div>
+               <div class="row">
+
+               <div class="picklist">
+                <lightning-combobox
+                    name="Session"
+                    label="Session"
+                    placeholder="Select Session"
+                    options={SessionOptions}   
+                    onchange={handleSession}                         
+                    required
+                ></lightning-combobox>
+            </div>
+
+            <div class="picklist">
+                <lightning-combobox
+                    name="Select Date"
+                    label="Select Date"
+                    placeholder="Select Date"
+                    options={TimeTableDates}   
+                    onchange={SelectedDate}
+                    value={DateByIA}                         
+                ></lightning-combobox>
+            </div>
+            <div class="picklist">
+                <lightning-combobox
+                    name="Select Time"
+                    label="Select Time"
+                    placeholder="Select Time"
+                    options={TimeTableTimes}   
+                    onchange={handleTime}
+                ></lightning-combobox>
+            </div>
+               </div>
+               </div>
+               <div class="footer">
+                  <lightning-button label="Search" name="Search" onclick={SearchFacility}></lightning-button>
+               </div><br/>
+           </div></div>
+        </article>
+        </template>
+        <template if:true={DisplayStudents}>
+         <table class="slds-table slds-table_cell-buffer slds-no-row-hover slds-table_bordered slds-border_left slds-border_right slds-table_col-bordered" aria-label="Class Rooms">
+                   <thead>
+                       <tr class="slds-line-height_reset">
+                           <th class="" scope="col" colspan="100%" style="text-align: center;">
+                               <div class="slds-truncate" title="Opportunity Name">Student List</div>
+                           </th>
+                       </tr>
+                       <tr class="slds-line-height_reset">
+                       
+                         <th class="" scope="col">
+                           <div class="slds-truncate" title="Eligible Students">Eligible Students</div>
+                         </th>
+                         <th class="" scope="col">
+                           <div class="slds-truncate" title="InEligible Students">InEligible Students</div>
+                         </th>
+                         <th class="" scope="col">
+                            <div class="slds-truncate" title="Total Students">Total Students</div>
+                          </th>
+                       
+                       </tr>
+                   </thead>
+                   <tbody>
+                           <tr class="slds-hint-parent">
+                               <td>
+                                   <div class="slds-truncate" title="Room No">{EligibleStudentsCount}</div>        
+                               </td>
+                               <td>
+                                   <div class="slds-truncate" title="Block">{InEligibleStudentsCount}</div>        
+                               </td>
+                               <td>
+                                <div class="slds-truncate" title="Block">{TotalStudents}</div>        
+                            </td>
+                           </tr>
+                   </tbody>
+         </table>
+        </template><br/><br/>
+           <template if:true={DisplayFacility}>
+           <div class="classRoomTable">
+               <table class="slds-table slds-table_cell-buffer slds-no-row-hover slds-table_bordered slds-border_left slds-border_right slds-table_col-bordered" aria-label="Class Rooms">
+                   <thead>
+                       <tr class="slds-line-height_reset">
+                           <th class="" scope="col" colspan="100%" style="text-align: center;">
+                               <div class="slds-truncate" title="Opportunity Name">Available Facilities</div>
+                           </th>
+                       </tr>
+                       <tr class="slds-line-height_reset">
+                        <th class="" scope="col">
+                            <div class="slds-truncate" title="S.No">S.No</div>
+                          </th>
+                         <th class="" scope="col">
+                           <div class="slds-truncate" title="Room No">Room No</div>
+                         </th>
+                         <th class="" scope="col">
+                           <div class="slds-truncate" title="Block">Block</div>
+                         </th>
+                         <th class="" scope="col">
+                           <div class="slds-truncate" title="Floor">Floor</div>
+                         </th>
+                         <th class="" scope="col">
+                           <div class="slds-truncate" title="Capacity">Capacity</div>
+                         </th>
+                         <th class="" scope="col">
+                            <div class="slds-truncate" title="Remaining Capacity">Remaining Capacity</div>
+                          </th>
+                          <th class="" scope="col">
+                            <div class="slds-truncate" title="Capacity Needed">Capacity Needed</div>
+                          </th>
+                         <th class="" scope="col">
+                           <div class="slds-truncate" title="Select Room">Select Room</div>
+                         </th>
+                       
+                       </tr>
+                   </thead>
+                   <tbody>
+                       <template for:each={seatingArrangements} for:item="item" for:index="index">              
+                          <!-- <div key={item} class="row">-->
+                           <tr key={item} class="slds-hint-parent">
+                            <td>
+                                <div class="slds-truncate" data-id={item.index} title="Room No">{item.index}</div>        
+                            </td>
+                               <td>
+                                   <div class="slds-truncate" data-id={item.index} title="Room No">{item.Room__c}</div>        
+                               </td>
+                               <td>
+                                   <div class="slds-truncate" data-id={item.index} title="Block">{item.Block__c}</div>        
+                               </td>
+                               <td>
+                                   <div class="slds-truncate" data-id={item.index} title="Floor">{item.Floor__c}</div>        
+                               </td>
+                               <td>
+                                    <div class="slds-truncate" data-id={item.index} title="Capacity">{item.hed__Capacity__c}</div>        
+        
+                               </td>
+                               <td>
+                                <div class="slds-truncate" data-id={item.index} title="Remaining Capacity">{item.Remaining_Capacity__c}</div>        
+                            </td>
+                            <td>
+                            <div class="slds-truncate" title="Capacity Needed">
+                                <lightning-input data-id={item.index} variant="label-hidden" type="text" label="Capacity Needed" class="Capacity" value={item.Capacity_Needed__c} onchange={handleInputChange}></lightning-input>
+                            </div></td>
+                               <td>
+                                <div class="slds-truncate" title="CheckBox">
+                                    <lightning-input data-id={item.index} variant="label-hidden" type="checkbox" label="Select" value={item.Active__c} onchange={handleActiveCheckBoxChange}></lightning-input>
+                                </div>    
+                            </td>
+                           </tr>
+                       </template>
+                   </tbody>
+               </table>
+           </div>
+       <br/>
+
+
+               <div class="footer">
+               <lightning-button variant="success" label="Submit" title="Submit" onclick={handleSubmit} disabled={EnableSubmitButton} class="slds-m-left_x-small"></lightning-button>
+           </div >
+ 
+ </template><br/><br/><br/>
+
+ <template if:true={isModalOpen}>
+    <div class="slds-backdrop slds-backdrop_open"></div>
+    <div class="modal-container slds-modal slds-fade-in-open">
+        <div class="slds-modal__container">
+            <div class="slds-modal__header">
+                <h2 class="slds-modal__title">Select Type</h2>
+                <button class="slds-button slds-button_icon slds-modal__close" title="Close" onclick={closeModal}>
+                    <lightning-icon icon-name="utility:close" size="small"></lightning-icon>
+                    <span class="slds-assistive-text">Close</span>
+                </button>
+            </div>
+            <div class="slds-modal__content">
+                <div class="body" style="width:50%;margin-left:23%">
+                    <lightning-input type="date" label="Choose Date" onchange={handleAllotmentDate}></lightning-input>
+                </div>
+            
+                <div class="footer">
+                    <div class="button-container">
+                        <lightning-button variant="brand" label="Attendance Sheet" icon-name="utility:download"
+                                          icon-position="left" onclick={RenderAttendancePdf}>
+                        </lightning-button>
+                    </div>
+                    <div class="button-container">
+                        <lightning-button variant="brand" label="NoticeBoard Sheet" icon-name="utility:download"
+                                          icon-position="left" onclick={RenderNoticeBoardPdf}>
+                        </lightning-button><br/><br/><br/>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>
+<br></br>
+<c-rve-Invigilator-Assignment-Edit></c-rve-Invigilator-Assignment-Edit>
+      
+
+</template>
